@@ -12,7 +12,7 @@ class SlashCommandResponder
 		switch($reason)
 		{
 			case 'validation-failed':
-				return static::sendResponse('ephemeral', 'Wiadomość jest źle sformatowana. Wyślij kudosa jeszcze raz', [
+				return static::sendResponse('ephemeral', 'Wiadomość jest źle sformatowana. Wyślij karteczkę jeszcze raz', [
 					[
 						'text' => 'np. dla @janusz za dużego deala #wyzwanie',
 					]

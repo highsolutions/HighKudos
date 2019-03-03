@@ -134,7 +134,6 @@ class E2ETest extends TestCase
      */
     public function proper_message_but_lost_emoji_at_the_end()
     {
-    	$this->withoutExceptionHandling();
     	Notification::fake();
 
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest([

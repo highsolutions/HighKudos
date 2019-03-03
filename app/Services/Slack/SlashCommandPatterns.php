@@ -12,12 +12,12 @@ class SlashCommandPatterns
 
 	public static function getUsersPattern()
 	{
-		return '/(<@[a-z\d-]+\|[a-z\d-]+>)/miu';
+		return '/(<@[a-z\d-]+\|[a-z\d-\.]+>)/miu';
 	}
 
 	public static function getUserPattern()
 	{
-		return '/<@([a-z\d-]+)\|([a-z\d-]+)>/mui';
+		return '/<@([a-z\d-]+)\|([a-z\d-\.]+)>/mui';
 	}
 
 	public static function getValuesPattern()
