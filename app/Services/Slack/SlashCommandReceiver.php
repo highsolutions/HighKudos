@@ -16,7 +16,7 @@ class SlashCommandReceiver
 
 		$response = SlashCommandFormatter::prepare($kudos);
 
-		SlashCommandResponder::success($response);
+		SlashCommandResponder::success($kudos, $response);
 
 		return SlashCommandResponder::empty();
 	}

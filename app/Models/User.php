@@ -37,4 +37,9 @@ class User extends Authenticatable
 		return $user;
     }
 
+    public function routeNotificationForSlack($notification)
+    {
+        return config('kudos.webhook_url');
+    }
+
 }

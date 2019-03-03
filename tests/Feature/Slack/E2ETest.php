@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Models\Kudos;
+use App\Notifications\KudosNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class E2ETest extends TestCase
@@ -32,7 +34,7 @@ class E2ETest extends TestCase
         $response->assertOk();
         $response->assertExactJson([
         	'response_type' => 'ephemeral',
-        	'message' => 'Wiadomość jest źle sformatowana. Wyślij kudosa jeszcze raz',
+        	'text' => 'Wiadomość jest źle sformatowana. Wyślij kudosa jeszcze raz',
         	'attachments' => [
         		[
 					'text' => 'np. dla @janusz za dużego deala #wyzwanie',
@@ -46,15 +48,11 @@ class E2ETest extends TestCase
      */
     public function proper_message()
     {
-    	$this->withoutExceptionHandling();
+    	Notification::fake();
+
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest());
 
         $response->assertOk();
-        $response->assertExactJson([
-        	'response_type' => 'ephemeral',
-        	'message' => 'dla @adam @adam2 za tę integrację :parrot: :) #zaangażowanie #rozwój od @adam',
-        	'attachments' => [],
-        ]);
 
         $kudos = Kudos::first();
         $this->assertEquals('tę integrację :parrot: :)', $kudos->message);
@@ -78,6 +76,10 @@ class E2ETest extends TestCase
         tap($kudos->values[1], function ($value) {
 	        $this->assertEquals('rozwój', $value->text);
         });
+
+        Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
+        	return $notification->message == 'dla <@U025D6EPH|adam> <@U025D6EP1|adam2> za tę integrację :parrot: :) #zaangażowanie #rozwój od <@U025D6EPH|adam>';
+        });
     }
 
     /**
@@ -85,19 +87,20 @@ class E2ETest extends TestCase
      */
     public function proper_message_without_values()
     {
+    	Notification::fake();
+
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
 			'text' => 'dla <@U025D6EPH|adam> <@U025D6EP1|adam2> za tę integrację :parrot: :)',
 		]));
 
         $response->assertOk();
-        $response->assertExactJson([
-        	'response_type' => 'ephemeral',
-        	'message' => 'dla @adam @adam2 za tę integrację :parrot: :) od @adam',
-        	'attachments' => [],
-        ]);
 
         $kudos = Kudos::first();
         $this->assertEquals(0, $kudos->values()->count());
+
+        Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
+        	return $notification->message == 'dla <@U025D6EPH|adam> <@U025D6EP1|adam2> za tę integrację :parrot: :) od <@U025D6EPH|adam>';
+        });
     }
 
     /**
@@ -105,16 +108,13 @@ class E2ETest extends TestCase
      */
     public function proper_message_with_one_receiver()
     {
+    	Notification::fake();
+
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
 			'text' => 'dla <@U025D6EP1|adam2> za tę integrację :parrot: :)',
 		]));
 
         $response->assertOk();
-        $response->assertExactJson([
-        	'response_type' => 'ephemeral',
-        	'message' => 'dla @adam2 za tę integrację :parrot: :) od @adam',
-        	'attachments' => [],
-        ]);
 
         $kudos = Kudos::first();
         $this->assertEquals(1, $kudos->receivers()->count());
@@ -123,6 +123,10 @@ class E2ETest extends TestCase
 	        $this->assertEquals('adam2', $receiver->username);
 	        $this->assertEquals('U025D6EP1', $receiver->slack_id);
         });
+
+        Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
+        	return $notification->message == 'dla <@U025D6EP1|adam2> za tę integrację :parrot: :) od <@U025D6EPH|adam>';
+        });
     }
 
     /**
@@ -130,6 +134,8 @@ class E2ETest extends TestCase
      */
     public function inproper_message_because_no_receiver()
     {
+    	Notification::fake();
+
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
 			'text' => 'dla Slackbota za tę integrację :parrot: :)',
 		]));
@@ -137,6 +143,8 @@ class E2ETest extends TestCase
         $this->assertWrongFormat($response);
 
         $this->assertEquals(0, Kudos::count());
+
+        Notification::assertNothingSent();
     }
 
     /**
@@ -144,6 +152,8 @@ class E2ETest extends TestCase
      */
     public function inproper_message_because_wrong_format()
     {
+    	Notification::fake();
+
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
 			'text' => 'blubry',
 		]));
@@ -151,6 +161,8 @@ class E2ETest extends TestCase
         $this->assertWrongFormat($response);
 
         $this->assertEquals(0, Kudos::count());
+
+        Notification::assertNothingSent();
     }
     
 }
