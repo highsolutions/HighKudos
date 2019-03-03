@@ -25,6 +25,11 @@ class SlashCommandPatterns
 		return '/(#[\w\d-]+)/miu';
 	}
 
+	public static function getEmojiPattern()
+	{
+		return '/([\:|\;][\w\)\>\d-]+\:?)/miu';
+	}
+
 	public static function getResponsePattern()
 	{
 		return 'dla @users za @message @values od @sender';

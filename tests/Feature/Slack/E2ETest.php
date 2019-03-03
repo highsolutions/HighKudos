@@ -134,6 +134,7 @@ class E2ETest extends TestCase
      */
     public function proper_message_but_lost_emoji_at_the_end()
     {
+    	$this->withoutExceptionHandling();
     	Notification::fake();
 
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
@@ -145,7 +146,7 @@ class E2ETest extends TestCase
         $kudos = Kudos::first();
 
         Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
-        	return $notification->message == 'dla <@U025D6EP1|adam2> za tę integrację #rozwój od <@U025D6EPH|adam>';
+        	return $notification->message == 'dla <@U025D6EP1|adam2> za tę integrację :parrot: :) #rozwój od <@U025D6EPH|adam>';
         });
     }
 
