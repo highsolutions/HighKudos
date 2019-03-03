@@ -32,7 +32,7 @@ class SlashCommandPatterns
 
 	public static function getResponsePattern()
 	{
-		return 'Kudos dla @users _za @message_ `@values` od @sender';
+		return '@sender dał właśnie kudosa dla @users _za @message_ `@values`.';
 	}
 
 }
