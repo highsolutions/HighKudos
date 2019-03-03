@@ -23,9 +23,9 @@ class SlashCommandResponder
 		return static::sendResponse('ephemeral', $message);		
 	}
 
-	protected static function sendResponse($response_type, $message, $attachments = [])
+	protected static function sendResponse($response_type, $text, $attachments = [])
 	{
-		return response(compact('response_type', 'message', 'attachments'));
+		return response(compact('response_type', 'text', 'attachments'));
 	}
 
 }
