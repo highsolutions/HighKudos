@@ -22,6 +22,8 @@ class SlashCommandPersister
 
 	protected static function getSender($parameters)
 	{
+		$token = $parameters['token'];
+		\Log::info(file_get_contents('https://slack.com/api/users.profile.get?token='. $token .'&user='. $parameters['user_id']));
 		return User::findOrCreateFromSlack('<@'. $parameters['user_id'] .'|'. $parameters['user_name'] .'>');
 	}
 
