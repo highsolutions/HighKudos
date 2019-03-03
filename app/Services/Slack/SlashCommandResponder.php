@@ -25,7 +25,7 @@ class SlashCommandResponder
 
 	public static function empty()
 	{
-		return response();
+		return response([]);
 	}
 
 	public static function success($message)
