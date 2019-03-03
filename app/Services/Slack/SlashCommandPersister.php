@@ -5,6 +5,7 @@ namespace App\Services\Slack;
 use App\Models\Kudos;
 use App\Models\KudosValue;
 use App\Models\User;
+use Carbon\Carbon;
 
 class SlashCommandPersister
 {
@@ -36,7 +37,10 @@ class SlashCommandPersister
 	{
 		collect($receivers)
 			->each(function ($receiver) use ($kudos) {
-				$kudos->receivers()->save(User::findOrCreateFromSlack($receiver));
+				$kudos->receivers()->save(User::findOrCreateFromSlack($receiver), [
+					'created_at' => Carbon::now(),
+					'updated_at' => Carbon::now(),
+				]);
 			});
 	}
 

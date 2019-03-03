@@ -46,11 +46,12 @@ class E2ETest extends TestCase
      */
     public function proper_message()
     {
+    	$this->withoutExceptionHandling();
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest());
 
         $response->assertOk();
         $response->assertExactJson([
-        	'response_type' => 'in_channel',
+        	'response_type' => 'ephemeral',
         	'message' => 'dla @adam @adam2 za tę integrację :parrot: :) #zaangażowanie #rozwój od @adam',
         	'attachments' => [],
         ]);
@@ -90,7 +91,7 @@ class E2ETest extends TestCase
 
         $response->assertOk();
         $response->assertExactJson([
-        	'response_type' => 'in_channel',
+        	'response_type' => 'ephemeral',
         	'message' => 'dla @adam @adam2 za tę integrację :parrot: :) od @adam',
         	'attachments' => [],
         ]);
@@ -110,7 +111,7 @@ class E2ETest extends TestCase
 
         $response->assertOk();
         $response->assertExactJson([
-        	'response_type' => 'in_channel',
+        	'response_type' => 'ephemeral',
         	'message' => 'dla @adam2 za tę integrację :parrot: :) od @adam',
         	'attachments' => [],
         ]);
