@@ -20,7 +20,7 @@ class SlashCommandResponder
 
 	public static function success($message)
 	{
-		return static::sendResponse('in_channel', $message);		
+		return static::sendResponse('ephemeral', $message);		
 	}
 
 	protected static function sendResponse($response_type, $message, $attachments = [])
