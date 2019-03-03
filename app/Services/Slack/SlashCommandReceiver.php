@@ -18,7 +18,7 @@ class SlashCommandReceiver
 
 		SlashCommandResponder::success($response);
 
-		return SlashCommandResponder::confirmation();
+		return SlashCommandResponder::empty();
 	}
 
 

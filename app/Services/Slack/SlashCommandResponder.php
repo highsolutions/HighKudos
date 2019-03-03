@@ -23,6 +23,11 @@ class SlashCommandResponder
 		return static::sendResponse('ephemeral', 'Właśnie dałeś karteczkę!');		
 	}
 
+	public static function empty()
+	{
+		return response();
+	}
+
 	public static function success($message)
 	{
 		$ch = curl_init();
