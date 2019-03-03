@@ -78,7 +78,7 @@ class E2ETest extends TestCase
         });
 
         Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
-        	return $notification->message == 'dla <@U025D6EPH|adam> <@U025D6EP1|adam2> za tę integrację :parrot: :) #zaangażowanie #rozwój od <@U025D6EPH|adam>';
+        	return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EPH|adam> <@U025D6EP1|adam2>* _za tę integrację :parrot: :)_ `#zaangażowanie #rozwój`.';
         });
     }
 
@@ -99,7 +99,7 @@ class E2ETest extends TestCase
         $this->assertEquals(0, $kudos->values()->count());
 
         Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
-        	return $notification->message == 'dla <@U025D6EPH|adam> <@U025D6EP1|adam2> za tę integrację :parrot: :) od <@U025D6EPH|adam>';
+        	return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EPH|adam> <@U025D6EP1|adam2>* _za tę integrację :parrot: :)_.';
         });
     }
 
@@ -125,7 +125,7 @@ class E2ETest extends TestCase
         });
 
         Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
-        	return $notification->message == 'dla <@U025D6EP1|adam2> za tę integrację :parrot: :) od <@U025D6EPH|adam>';
+        	return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EP1|adam2>* _za tę integrację :parrot: :)_.';
         });
     }
 
@@ -146,7 +146,7 @@ class E2ETest extends TestCase
         $kudos = Kudos::first();
 
         Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
-        	return $notification->message == 'dla <@U025D6EP1|adam2> za tę integrację :parrot: :) #rozwój od <@U025D6EPH|adam>';
+        	return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EP1|adam2>* _za tę integrację :parrot: :)_ `#rozwój`.';
         });
     }
 

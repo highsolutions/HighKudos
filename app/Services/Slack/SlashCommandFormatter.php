@@ -31,7 +31,7 @@ class SlashCommandFormatter
 				$pattern = str_replace('@'. $key, $value, $pattern);
 			});
 
-		return trim(preg_replace('!\s+!', ' ', $pattern));
+		return trim(str_replace(['``', ' .'], ['', '.'], preg_replace('!\s+!', ' ', $pattern)));
 	}
 
 	protected static function getReceivers()
