@@ -3,15 +3,14 @@
 namespace App\Http\Controllers\Slack;
 
 use App\Http\Controllers\Controller;
+use App\Services\Slack\SlashCommandReceiver;
 
 class SlashCommandController extends Controller
 {
 
     public function index()
     {
-        $all = request()->all();
-        \Log::info($all);
-        dd($all);
+        return SlashCommandReceiver::get(request()->all());
     }
 
 }
