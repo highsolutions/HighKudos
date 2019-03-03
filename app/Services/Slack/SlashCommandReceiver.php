@@ -15,7 +15,7 @@ class SlashCommandReceiver
 		$kudos = SlashCommandPersister::store($partials, $parameters);
 
 		$response = SlashCommandFormatter::prepare($kudos);
-
+\Log::info($response);
 		return SlashCommandResponder::success($response);
 	}
 
