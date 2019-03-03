@@ -124,5 +124,49 @@ class ModelsTest extends TestCase
         	$this->assertEquals('trust', $values->last()->text);
         });
     }
+
+    /**
+     * @test
+     */
+    public function sender_can_access_given_kudos()
+    {
+    	$sender = factory(User::class)->create([
+    		'name' => 'John Doe',
+    	]);
+
+        factory(Kudos::class)
+        	->create([
+        		'sender_id' => $sender->id,
+        		'message' => 'test message',
+        	]);
+
+       	$kudos = $sender->kudosGiven()->first();
+
+        $this->assertEquals('test message', $kudos->message);
+    }
+
+    /**
+     * @test
+     */
+    public function receiver_can_access_his_kudos()
+    {
+    	$sender = factory(User::class)->create([
+    		'name' => 'John Doe',
+    	]);
+
+    	$receiver = factory(User::class)->create([
+    		'name' => 'Jack Sparrow',
+    	]);
+
+        factory(Kudos::class)
+        	->create([
+        		'sender_id' => $sender->id,
+        		'message' => 'test message',
+        	])->receivers()->save($receiver);
+
+       	$kudos = $receiver->kudosReceived()->first();
+
+        $this->assertEquals('test message', $kudos->message);
+    }
     
 }

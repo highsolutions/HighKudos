@@ -14,6 +14,16 @@ class User extends Authenticatable
         'name', 'username', 'slack_id', 'avatar_url',
     ];
 
+    public function kudosGiven()
+    {
+    	return $this->hasMany(Kudos::class, 'sender_id', 'id');
+    }
+
+    public function kudosReceived()
+    {
+    	return $this->belongsToMany(Kudos::class, 'kudos_receivers', 'kudos_id', 'receiver_id');
+    }
+
     public static function findOrCreateFromSlack($fullSlackIdentifier)
     {
     	$pattern = SlashCommandPatterns::getUserPattern();
@@ -35,6 +45,11 @@ class User extends Authenticatable
 		}
 
 		return $user;
+    }
+
+    public function formatForSlack()
+    {
+    	return '<@'. $this->slack_id .'|'. $this->username .'>';
     }
 
     public function routeNotificationForSlack($notification)

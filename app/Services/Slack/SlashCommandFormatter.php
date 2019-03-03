@@ -38,7 +38,7 @@ class SlashCommandFormatter
 	{
 		return collect(static::$kudos->receivers)
 			->map(function ($receiver) {
-				return '<@'. $receiver->slack_id .'|'. $receiver->username .'>';
+				return $receiver->formatForSlack();
 			})->implode(' ');
 	}
 
@@ -57,7 +57,7 @@ class SlashCommandFormatter
 
 	protected static function getSender()
 	{
-		return '<@'. static::$kudos->sender->slack_id .'|'. static::$kudos->sender->username .'>';
+		return static::$kudos->sender->formatForSlack();
 	}
 
 }
