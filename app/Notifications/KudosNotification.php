@@ -26,6 +26,7 @@ class KudosNotification extends Notification
     public function toSlack($notifiable)
     {
         return (new SlackMessage)
+                ->to(config('kudos.slack_channel'))
                 ->content($this->message);
     }
 }
