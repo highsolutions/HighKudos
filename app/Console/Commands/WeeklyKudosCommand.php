@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use App\Notifications\KudosNotification;
 use App\Notifications\SummaryNotification;
 use Illuminate\Console\Command;
 
