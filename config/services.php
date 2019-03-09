@@ -39,10 +39,5 @@ return [
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
     ],
-    
-    'slack' => [
-        'webhook_url' => 'https://hooks.slack.com/services/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',
-        'leads_url' => 'https://hooks.slack.com/services/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',
-    ],
 
 ];

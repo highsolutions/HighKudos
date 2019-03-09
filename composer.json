@@ -17,6 +17,7 @@
         "highsolutions/github-hook": "*",
         "highsolutions/laravel-environments": "*",
         "laravel/framework": "5.8.*",
+        "laravel/slack-notification-channel": "^2.0",
         "laravel/tinker": "^1.0",
         "nesbot/carbon": "*"
     },

@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>HighSolutions/TemplateWeb</title>
+        <title>HighKudos</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet" type="text/css">
@@ -81,13 +81,13 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    HighSolutions/TemplateWeb
+                    HighSolutions/HighKudos
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://highsolutions.pl">Company Website</a>
+                    <a href="https://highsolutions.pl">HighSolutions</a>
+                    <a href="https://www.urbandictionary.com/define.php?term=Kudos">Urban Dictionary</a>
+                    <a href="https://en.wikipedia.org/wiki/Kudos">Wikipedia</a>
                     <a href="https://github.com/highsolutions/TemplateWeb">GitHub</a>
                 </div>
             </div>
