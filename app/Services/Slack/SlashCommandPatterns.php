@@ -30,9 +30,15 @@ class SlashCommandPatterns
 		return '/([\:|\;][\w\)\>\d-]+\:?)/miu';
 	}
 
-	public static function getResponsePattern()
+	public static function getResponsePattern($type = 'normal')
 	{
-		return '@sender daje e-karteczkę dla *@users* _za @message_ `@values`.';
+		switch($type)
+		{
+			case 'summary':
+				return 'Dostałeś/-aś e-karteczkę _za @message_ `@values`.';
+			default: 
+				return '@sender daje e-karteczkę dla *@users* _za @message_ `@values`.';
+		}
 	}
 
 }

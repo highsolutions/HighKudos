@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function routeNotificationForSlack($notification)
     {
-        return config('kudos.webhook_url');
+        return config('kudos.incoming_url');
     }
 
 }

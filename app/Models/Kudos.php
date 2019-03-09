@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Kudos extends Model
@@ -25,6 +26,11 @@ class Kudos extends Model
     public function values()
     {
     	return $this->hasMany(KudosValue::class);
+    }
+
+    public function scopeThisWeek($query)
+    {
+        return $query->where('kudos.created_at', '>=', Carbon::now()->startOfWeek(Carbon::MONDAY)->format('Y-m-d 00:00:00'));
     }
 
 }

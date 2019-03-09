@@ -10,15 +10,16 @@ class SlashCommandFormatter
 
 	protected static $kudos;
 
-	public static function prepare($kudos)
+	public static function prepare($kudos, $pattern = 'normal')
 	{		
-		static::$kudos = $kudos;		
-    	$pattern = SlashCommandPatterns::getResponsePattern();
+		static::$kudos = $kudos;
+    	$pattern = SlashCommandPatterns::getResponsePattern($pattern);
     	$replacements = [
     		'users' => static::getReceivers(),
     		'message' => static::getMessage(),
     		'values' => static::getValues(),
     		'sender' => static::getSender(),
+    		'day' => static::getDay(),
     	];
 
     	return static::replace($pattern, $replacements);
@@ -58,6 +59,11 @@ class SlashCommandFormatter
 	protected static function getSender()
 	{
 		return static::$kudos->sender->formatForSlack();
+	}
+
+	protected static function getDay()
+	{
+		return static::$kudos->created_at->format('l');
 	}
 
 }

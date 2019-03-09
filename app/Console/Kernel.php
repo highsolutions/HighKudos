@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\StorageLinkCommand::class,
+        Commands\WeeklyKudosCommand::class,
     ];
 
     /**
@@ -24,8 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
+         $schedule
+            ->command('kudos:weekly')
+            ->weeklyOn(0, '20:00'); // Sunday
     }
 
     /**
