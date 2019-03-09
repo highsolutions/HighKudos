@@ -29,8 +29,7 @@ class WeeklyKudosCommand extends Command
      */
     public function handle()
     {
-        $users = User::where('username', 'adam')->get();
-        $users->each(function ($user) {
+        User::get()->each(function ($user) {
             $kudos = $user->kudosReceived()->thisWeek()->get();
             $user->notify(new SummaryNotification($kudos));
             $this->line('Message was sent to: @'. $user->username);
