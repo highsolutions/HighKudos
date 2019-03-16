@@ -48,7 +48,7 @@ class SlashCommandAnalyzer
 
 		return collect($matches)
 			->map(function ($value) {
-				return str_replace('#', '', $value[1]);
+				return trim(str_replace('#', '', $value[1]));
 			})->all();
 	}
 
