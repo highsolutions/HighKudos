@@ -58,10 +58,10 @@ class SlashCommandValidator
 
 		foreach($matches as $match) 
 		{
-			if(sizeof($match) < 2 || strpos($match[0], '#') !== 0)
+			if(sizeof($match) < 2 || strpos(trim($match[0]), '#') !== 0)
 				return false;
 		}
-
+		
 		return true;
 	}
 

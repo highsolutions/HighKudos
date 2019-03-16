@@ -7,7 +7,7 @@ class SlashCommandPatterns
 
 	public static function getOverallPattern()
 	{
-		return '/^dla (.+) za (.+)\s*(#.*+)*$/mUu';
+		return '/^dla (.+) za (.+)\s*([^<]#.*+)*$/mUu';
 	}
 
 	public static function getUsersPattern()
@@ -22,7 +22,7 @@ class SlashCommandPatterns
 
 	public static function getValuesPattern()
 	{
-		return '/(#[\w\d-]+)/miu';
+		return '/([^<]#[\w\d-]+)/miu';
 	}
 
 	public static function getEmojiPattern()

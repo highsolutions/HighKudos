@@ -34,7 +34,7 @@ class E2ETest extends TestCase
         $response->assertOk();
         $response->assertExactJson([
         	'response_type' => 'ephemeral',
-        	'text' => 'Wiadomość jest źle sformatowana. Wyślij kudosa jeszcze raz',
+        	'text' => 'Wiadomość jest źle sformatowana. Wyślij karteczkę jeszcze raz',
         	'attachments' => [
         		[
 					'text' => 'np. dla @janusz za dużego deala #wyzwanie',
@@ -134,18 +134,38 @@ class E2ETest extends TestCase
      */
     public function proper_message_but_lost_emoji_at_the_end()
     {
-    	Notification::fake();
+        Notification::fake();
 
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
-			'text' => 'dla <@U025D6EP1|adam2> za tę integrację #rozwój :parrot: :)',
-		]));
+            'text' => 'dla <@U025D6EP1|adam2> za tę integrację #rozwój :parrot: :)',
+        ]));
 
         $response->assertOk();
 
         $kudos = Kudos::first();
 
         Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
-        	return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EP1|adam2>* _za tę integrację :parrot: :)_ `#rozwój`.';
+            return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EP1|adam2>* _za tę integrację :parrot: :)_ `#rozwój`.';
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function proper_message_with_channel_in_description()
+    {
+        Notification::fake();
+
+        $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
+            'text' => 'dla <@U025D6EP1|adam2> za pomoc na kanale <#CGS6231LQH|help> #zaangażowanie',
+        ]));
+
+        $response->assertOk();
+
+        $kudos = Kudos::first();
+
+        Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
+            return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EP1|adam2>* _za pomoc na kanale <#CGS6231LQH|help>_ `#zaangażowanie`.';
         });
     }
 
