@@ -32,8 +32,12 @@ class WeeklyKudosCommand extends Command
     {
         User::get()->each(function ($user) {
             $kudos = $user->kudosReceived()->thisWeek()->get();
-            $user->notify(new SummaryNotification($kudos));
-            $this->line('Message was sent to: @'. $user->username);
+            if($kudos->count() > 0) {
+            	$user->notify(new SummaryNotification($kudos));
+            	$this->line('Message was sent to: @'. $user->username);
+            } else {
+            	$this->line('Message was not sent to: @'. $user->username .' because of zero kudos.');
+            }
         });
 
         $this->line('Finished sending weekly summary of kudos.');
