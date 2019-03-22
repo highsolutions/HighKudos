@@ -44,6 +44,9 @@ class SlashCommandValidator
 				return true;
 		}
 
+		if($users == '@all')
+			return true;
+
 		return false;
 	}
 

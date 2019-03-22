@@ -29,6 +29,22 @@ class SlashCommandAnalyzer
 
 	protected static function getReceivers($users)
 	{
+		if($users == '@all')
+			return static::getAllReceivers();
+		
+		return static::getFewReceivers($users);			
+	}
+
+	protected static function getAllReceivers()
+	{
+		return User::get()
+			->map(function ($user) {
+				return $user->formatForSlack();
+			});
+	}
+
+	protected static function getFewReceivers($users)
+	{
 		preg_match_all(SlashCommandPatterns::getUsersPattern(), $users, $matches, PREG_SET_ORDER, 0);
 
 		return collect($matches)

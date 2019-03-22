@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Kudos;
+use App\Models\User;
 use App\Notifications\KudosNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
@@ -166,6 +167,36 @@ class E2ETest extends TestCase
 
         Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
             return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EP1|adam2>* _za pomoc na kanale <#CGS6231LQH|help>_ `#zaangażowanie`.';
+        });
+    }
+
+    /**
+     * @test
+     */
+    public function proper_message_with_all_users()
+    {
+        Notification::fake();
+
+        factory(User::class)->create([
+            'username' => 'test1',
+            'slack_id' => 'U123456',
+        ]);
+
+        factory(User::class)->create([
+            'username' => 'test2',
+            'slack_id' => 'U789012',
+        ]);
+$this->withoutExceptionHandling();
+        $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
+            'text' => 'dla @all za życzenia urodzinowe #zaangażowanie',
+        ]));
+
+        $response->assertOk();
+
+        $kudos = Kudos::first();
+
+        Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
+            return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U123456|test1> <@U789012|test2>* _za życzenia urodzinowe_ `#zaangażowanie`.';
         });
     }
 
