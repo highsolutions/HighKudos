@@ -14,7 +14,7 @@ class SlashCommandAnalyzer
 
 		return [
 			'full_message' => $parameters['text'],
-			'receivers' => static::getReceivers(array_get($partials, 1, '')),
+			'receivers' => static::getReceivers(array_get($partials, 1, ''), $parameters['user_id']),
 			'message' => static::getMessage($partials),
 			'values' => static::getValues(array_get($partials, 3, '')),
 		];
@@ -27,17 +27,19 @@ class SlashCommandAnalyzer
 		return $matches[0];
 	}
 
-	protected static function getReceivers($users)
+	protected static function getReceivers($users, $sender)
 	{
 		if($users == '@all')
-			return static::getAllReceivers();
+			return static::getAllReceivers($sender);
 		
 		return static::getFewReceivers($users);			
 	}
 
-	protected static function getAllReceivers()
+	protected static function getAllReceivers($sender)
 	{
-		return User::get()
+		return User::query()
+			->where('slack_id', '<>', $sender)
+			->get()
 			->map(function ($user) {
 				return $user->formatForSlack();
 			});

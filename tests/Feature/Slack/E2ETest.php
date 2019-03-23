@@ -186,7 +186,12 @@ class E2ETest extends TestCase
             'username' => 'test2',
             'slack_id' => 'U789012',
         ]);
-$this->withoutExceptionHandling();
+
+        factory(User::class)->create([
+            'username' => 'adam',
+            'slack_id' => 'U025D6EPH',
+        ]);
+
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
             'text' => 'dla @all za życzenia urodzinowe #zaangażowanie',
         ]));
