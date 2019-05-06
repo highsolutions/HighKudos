@@ -208,6 +208,27 @@ class E2ETest extends TestCase
     /**
      * @test
      */
+    public function proper_message_with_two_keywords()
+    {
+        Notification::fake();
+
+        $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
+            'text' => 'dla <@U025D6EPH|adam> za to i za to',
+        ]));
+
+        $response->assertOk();
+
+        $kudos = Kudos::first();
+        $this->assertEquals('to i za to', $kudos->message);
+
+        Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
+            return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EPH|adam>* _za to i za to_.';
+        });
+    }
+
+    /**
+     * @test
+     */
     public function inproper_message_because_no_receiver()
     {
     	Notification::fake();
