@@ -2,12 +2,14 @@
 
 namespace App\Services\Slack;
 
+use Illuminate\Support\Arr;
+
 class SlashCommandReceiver
 {
 
 	public static function get($parameters)
 	{
-		if(! SlashCommandValidator::check(array_get($parameters, 'text')))
+		if(! SlashCommandValidator::check(Arr::get($parameters, 'text')))
 			return SlashCommandResponder::error('validation-failed');
 
 		$partials = SlashCommandAnalyzer::handle($parameters);

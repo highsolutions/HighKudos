@@ -4,6 +4,7 @@ namespace App\Services\Slack;
 
 use App\Models\Kudos;
 use App\Models\User;
+use Illuminate\Support\Arr;
 
 class SlashCommandAnalyzer
 {
@@ -14,9 +15,9 @@ class SlashCommandAnalyzer
 
 		return [
 			'full_message' => $parameters['text'],
-			'receivers' => static::getReceivers(array_get($partials, 1, ''), $parameters['user_id']),
+			'receivers' => static::getReceivers(Arr::get($partials, 1, ''), $parameters['user_id']),
 			'message' => static::getMessage($partials),
-			'values' => static::getValues(array_get($partials, 3, '')),
+			'values' => static::getValues(Arr::get($partials, 3, '')),
 		];
 	}
 
@@ -57,7 +58,7 @@ class SlashCommandAnalyzer
 
 	protected static function getMessage($partials)
 	{
- 		return trim(array_get($partials, 2, '') . ' '. static::getFinishingEmoji(array_get($partials, 3, '')));
+ 		return trim(Arr::get($partials, 2, '') . ' '. static::getFinishingEmoji(Arr::get($partials, 3, '')));
 	}
 
 	protected static function getValues($values)
