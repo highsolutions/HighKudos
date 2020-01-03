@@ -21,7 +21,7 @@ class User extends Authenticatable
 
     public function kudosReceived()
     {
-    	return $this->belongsToMany(Kudos::class, 'kudos_receivers', 'kudos_id', 'receiver_id');
+    	return $this->belongsToMany(Kudos::class, 'kudos_receivers', 'receiver_id', 'kudos_id');
     }
 
     public static function findOrCreateFromSlack($fullSlackIdentifier)

@@ -20,7 +20,7 @@ class Kudos extends Model
 
     public function receivers()
     {
-    	return $this->belongsToMany(User::class, 'kudos_receivers', 'receiver_id', 'kudos_id');
+    	return $this->belongsToMany(User::class, 'kudos_receivers', 'kudos_id', 'receiver_id');
     }
 
     public function values()
