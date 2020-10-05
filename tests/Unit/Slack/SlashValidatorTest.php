@@ -60,7 +60,7 @@ class SlashValidatorTest extends TestCase
     public function message_without_receiver()
     {
         $message = 'dla Adama za super integrację ze slackiem';
-        $this->assertFalseValidation($message);
+        $this->assertPositiveValidation($message);
     }
 
     /**
@@ -69,7 +69,7 @@ class SlashValidatorTest extends TestCase
     public function message_without_message()
     {
         $message = 'dla Adama za #zaangażowanie';
-        $this->assertFalseValidation($message);
+        $this->assertPositiveValidation($message);
     }
 
     /**
@@ -78,7 +78,7 @@ class SlashValidatorTest extends TestCase
     public function message_with_wrong_pattern()
     {
         $message = 'za super ciasto';
-        $this->assertFalseValidation($message);
+        $this->assertPositiveValidation($message);
     }
     
 }

@@ -15,9 +15,9 @@ class SlashCommandAnalyzer
 
 		return [
 			'full_message' => $parameters['text'],
-			'receivers' => static::getReceivers(Arr::get($partials, 1, ''), $parameters['user_id']),
+			'receivers' => [],//static::getReceivers(Arr::get($partials, 1, ''), $parameters['user_id']),
 			'message' => static::getMessage($partials),
-			'values' => static::getValues(Arr::get($partials, 3, '')),
+			'values' => static::getValues(Arr::get($partials, 2, '')),
 		];
 	}
 
@@ -58,7 +58,7 @@ class SlashCommandAnalyzer
 
 	protected static function getMessage($partials)
 	{
- 		return trim(Arr::get($partials, 2, '') . ' '. static::getFinishingEmoji(Arr::get($partials, 3, '')));
+ 		return trim(Arr::get($partials, 1, '') . ' '. static::getFinishingEmoji(Arr::get($partials, 2, '')));
 	}
 
 	protected static function getValues($values)

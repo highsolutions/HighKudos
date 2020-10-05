@@ -12,13 +12,13 @@ class SlashCommandValidator
 		if($partials == false || sizeof($partials) < 2)
 			return false;
 
-		if(! static::checkUsers($partials[1]))
+		// if(! static::checkUsers($partials[1]))
+		// 	return false;
+
+		if(isset($partials[1]) && ! static::checkMessage($partials[1]))
 			return false;
 
-		if(! static::checkMessage($partials[2]))
-			return false;
-
-		if(isset($partials[3]) && ! static::checkValues($partials[3]))
+		if(isset($partials[2]) && ! static::checkValues($partials[2]))
 			return false;
 
 		return true;

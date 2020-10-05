@@ -7,7 +7,7 @@ class SlashCommandPatterns
 
 	public static function getOverallPattern()
 	{
-		return '/^dla (.+) za (.+)\s*([^<]#.*+)*$/mUu';
+		return '/^(.+)\s*([^<]#.*+)*$/mUu';
 	}
 
 	public static function getUsersPattern()
@@ -17,7 +17,7 @@ class SlashCommandPatterns
 
 	public static function getUserPattern()
 	{
-		return '/<@([a-z\d-]+)\|([a-z\d-\.]+)>/mui';
+		return '/<@([a-z\d-]+)\|([a-z\d\-\.]+)>/mui';
 	}
 
 	public static function getValuesPattern()
@@ -35,9 +35,9 @@ class SlashCommandPatterns
 		switch($type)
 		{
 			case 'summary':
-				return 'Dostałeś/-aś e-karteczkę _za @message_ `@values`.';
+				return 'Wykonałeś/-aś improv _@message_ `@values`.';
 			default: 
-				return '@sender daje e-karteczkę dla *@users* _za @message_ `@values`.';
+				return '@sender wykonał/-a improva _@message_ `@values`.';
 		}
 	}
 

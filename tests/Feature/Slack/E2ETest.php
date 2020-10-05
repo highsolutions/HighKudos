@@ -23,8 +23,8 @@ class E2ETest extends TestCase
 			'channel_name' => 'privategroup',
 			'user_id' => 'U025D6EPH',
 			'user_name' => 'adam',
-			'command' => '/kudos',
-			'text' => 'dla <@U025D6EPH|adam> <@U025D6EP1|adam2> za tę integrację :parrot: :) #zaangażowanie #rozwój',
+			'command' => '/improv',
+			'text' => 'poprawiony przecinek na stronie :parrot: :) #zaangażowanie #rozwój',
 			'response_url' => 'https://hooks.slack.com/commands/T025CNFDY/564793726912/hkg2uZGFID7E8iCb9AQDN6xv',
 			'trigger_id' => '565542326082.2182763474.be2df160b5961c826afb28e52df97dc0',
     	], $array);
@@ -35,10 +35,10 @@ class E2ETest extends TestCase
         $response->assertOk();
         $response->assertExactJson([
         	'response_type' => 'ephemeral',
-        	'text' => 'Wiadomość jest źle sformatowana. Wyślij karteczkę jeszcze raz',
+        	'text' => 'Wiadomość jest źle sformatowana. Wyślij improva jeszcze raz',
         	'attachments' => [
         		[
-					'text' => 'np. dla @janusz za dużego deala #wyzwanie',
+					'text' => 'np. zdobyłem deala za 100k #wyzwanie',
 				]
 			],
         ]);    	
@@ -49,6 +49,8 @@ class E2ETest extends TestCase
      */
     public function proper_message()
     {
+        $this->withoutExceptionHandling();
+
     	Notification::fake();
 
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest());
@@ -56,19 +58,9 @@ class E2ETest extends TestCase
         $response->assertOk();
 
         $kudos = Kudos::first();
-        $this->assertEquals('tę integrację :parrot: :)', $kudos->message);
+        $this->assertEquals('poprawiony przecinek na stronie :parrot: :)', $kudos->message);
         $this->assertEquals('adam', $kudos->sender->username);
         $this->assertEquals('U025D6EPH', $kudos->sender->slack_id);
-;
-        tap($kudos->receivers[0], function ($receiver) {
-	        $this->assertEquals('adam', $receiver->username);
-	        $this->assertEquals('U025D6EPH', $receiver->slack_id);
-        });
-
-        tap($kudos->receivers[1], function ($receiver) {
-	        $this->assertEquals('adam2', $receiver->username);
-	        $this->assertEquals('U025D6EP1', $receiver->slack_id);
-        });
 
         tap($kudos->values[0], function ($value) {
 	        $this->assertEquals('zaangażowanie', $value->text);
@@ -79,7 +71,7 @@ class E2ETest extends TestCase
         });
 
         Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
-        	return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EPH|adam> <@U025D6EP1|adam2>* _za tę integrację :parrot: :)_ `#zaangażowanie #rozwój`.';
+        	return $notification->message == '<@U025D6EPH|adam> wykonał/-a improva _poprawiony przecinek na stronie :parrot: :)_ `#zaangażowanie #rozwój`.';
         });
     }
 
@@ -88,10 +80,12 @@ class E2ETest extends TestCase
      */
     public function proper_message_without_values()
     {
+        $this->withoutExceptionHandling();
+        
     	Notification::fake();
 
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
-			'text' => 'dla <@U025D6EPH|adam> <@U025D6EP1|adam2> za tę integrację :parrot: :)',
+			'text' => 'poprawiony przecinek na stronie :parrot: :)',
 		]));
 
         $response->assertOk();
@@ -100,33 +94,7 @@ class E2ETest extends TestCase
         $this->assertEquals(0, $kudos->values()->count());
 
         Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
-        	return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EPH|adam> <@U025D6EP1|adam2>* _za tę integrację :parrot: :)_.';
-        });
-    }
-
-    /**
-     * @test
-     */
-    public function proper_message_with_one_receiver()
-    {
-    	Notification::fake();
-
-        $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
-			'text' => 'dla <@U025D6EP1|adam2> za tę integrację :parrot: :)',
-		]));
-
-        $response->assertOk();
-
-        $kudos = Kudos::first();
-        $this->assertEquals(1, $kudos->receivers()->count());
-        
-        tap($kudos->receivers[0], function ($receiver) {
-	        $this->assertEquals('adam2', $receiver->username);
-	        $this->assertEquals('U025D6EP1', $receiver->slack_id);
-        });
-
-        Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
-        	return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EP1|adam2>* _za tę integrację :parrot: :)_.';
+        	return $notification->message == '<@U025D6EPH|adam> wykonał/-a improva _poprawiony przecinek na stronie :parrot: :)_.';
         });
     }
 
@@ -138,7 +106,7 @@ class E2ETest extends TestCase
         Notification::fake();
 
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
-            'text' => 'dla <@U025D6EP1|adam2> za tę integrację #rozwój :parrot: :)',
+            'text' => 'poprawiony przecinek na stronie :parrot: :)',
         ]));
 
         $response->assertOk();
@@ -146,7 +114,7 @@ class E2ETest extends TestCase
         $kudos = Kudos::first();
 
         Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
-            return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EP1|adam2>* _za tę integrację :parrot: :)_ `#rozwój`.';
+            return $notification->message == '<@U025D6EPH|adam> wykonał/-a improva _poprawiony przecinek na stronie :parrot: :)_.';
         });
     }
 
@@ -158,7 +126,7 @@ class E2ETest extends TestCase
         Notification::fake();
 
         $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
-            'text' => 'dla <@U025D6EP1|adam2> za pomoc na kanale <#CGS6231LQH|help> #zaangażowanie',
+            'text' => 'utworzenie kanału <#CGS6231LQH|help> #zaangażowanie',
         ]));
 
         $response->assertOk();
@@ -166,70 +134,14 @@ class E2ETest extends TestCase
         $kudos = Kudos::first();
 
         Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
-            return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EP1|adam2>* _za pomoc na kanale <#CGS6231LQH|help>_ `#zaangażowanie`.';
+            return $notification->message == '<@U025D6EPH|adam> wykonał/-a improva _utworzenie kanału <#CGS6231LQH|help>_ `#zaangażowanie`.';
         });
     }
 
     /**
      * @test
      */
-    public function proper_message_with_all_users()
-    {
-        Notification::fake();
-
-        factory(User::class)->create([
-            'username' => 'test1',
-            'slack_id' => 'U123456',
-        ]);
-
-        factory(User::class)->create([
-            'username' => 'test2',
-            'slack_id' => 'U789012',
-        ]);
-
-        factory(User::class)->create([
-            'username' => 'adam',
-            'slack_id' => 'U025D6EPH',
-        ]);
-
-        $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
-            'text' => 'dla @all za życzenia urodzinowe #zaangażowanie',
-        ]));
-
-        $response->assertOk();
-
-        $kudos = Kudos::first();
-
-        Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
-            return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U123456|test1> <@U789012|test2>* _za życzenia urodzinowe_ `#zaangażowanie`.';
-        });
-    }
-
-    /**
-     * @test
-     */
-    public function proper_message_with_two_keywords()
-    {
-        Notification::fake();
-
-        $response = $this->post('/api/slack/fetch', $this->getSlackRequest([
-            'text' => 'dla <@U025D6EPH|adam> za to i za to',
-        ]));
-
-        $response->assertOk();
-
-        $kudos = Kudos::first();
-        $this->assertEquals('to i za to', $kudos->message);
-
-        Notification::assertSentTo($kudos->sender, KudosNotification::class, function ($notification) {
-            return $notification->message == '<@U025D6EPH|adam> daje e-karteczkę dla *<@U025D6EPH|adam>* _za to i za to_.';
-        });
-    }
-
-    /**
-     * @test
-     */
-    public function inproper_message_because_no_receiver()
+    public function improv_proper_message_no_receiver()
     {
     	Notification::fake();
 
@@ -237,17 +149,13 @@ class E2ETest extends TestCase
 			'text' => 'dla Slackbota za tę integrację :parrot: :)',
 		]));
 
-        $this->assertWrongFormat($response);
-
-        $this->assertEquals(0, Kudos::count());
-
-        Notification::assertNothingSent();
+        $response->assertOk();
     }
 
     /**
      * @test
      */
-    public function inproper_message_because_wrong_format()
+    public function improv_proper_message_wrong_format()
     {
     	Notification::fake();
 
@@ -255,11 +163,7 @@ class E2ETest extends TestCase
 			'text' => 'blubry',
 		]));
 
-        $this->assertWrongFormat($response);
-
-        $this->assertEquals(0, Kudos::count());
-
-        Notification::assertNothingSent();
+        $response->assertOk();
     }
     
 }

@@ -14,7 +14,7 @@ class SlashCommandPersister
 	{
 		$sender = static::getSender($parameters);
 		$kudos = static::createKudos($sender, $partials['message']);
-		static::addReceivers($kudos, $partials['receivers']);
+		//static::addReceivers($kudos, $partials['receivers']);
 		static::addValues($kudos, $partials['values']);
 
 		return $kudos;
